@@ -1,37 +1,22 @@
-import Champion from "@/components/Champion"
+import ChampionCard from "@/components/ChampionCard"
+import ChampionsContainer from "@/components/ChampionsContainer"
 
-async function getData() {
-  const res = await fetch('http://ddragon.leagueoflegends.com/cdn/11.14.1/data/en_US/champion.json')
+export default function Home() {
+  const metapicks = [
+    {role: "top", champions: ["Aatrox", "Ahri", "Maokai", "Jax", "Yorick"]},
+    {role: "jungle", champions: ["Aatrox", "Ahri", "Maokai", "Jax", "Yorick"]},
+    {role: "mid", champions: ["Annie", "Riven", "Neeko", "Morgana", "Lux"]},
+    {role: "adc", champions: ["Annie", "Riven", "Neeko", "Morgana", "Lux"]},
+    {role: "support", champions: [null,null,null,null,null]}, 
+]
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
-  }
 
-  return res.json()
-}
-
-export default async function Home() {
-  const { data } = await getData()
-  const champions = Object.entries(data).map(champion => ({ name: champion[0], properties: champion[1] }))
   return (
-    <main className="container-fluid">
-      {/* every champ */}
-      {/* {champions.map(champion =>
-        <Champion name={champion.name} properties={champion.properties} />
-      )} */}
-      <h2>My LoL Meta</h2>
-      <div className="grid">
-        <div>
-          <h4><b>Top</b></h4>
-          <ul>
-          <Champion name={champions.at(1)?.name} properties={champions.at(1)?.properties}></Champion>
-          <Champion name={champions.at(1)?.name} properties={champions.at(1)?.properties}></Champion>
-          <Champion name={champions.at(1)?.name} properties={champions.at(1)?.properties}></Champion>
-          <Champion name={champions.at(1)?.name} properties={champions.at(1)?.properties}></Champion>
-          <Champion name={champions.at(1)?.name} properties={champions.at(1)?.properties}></Champion>
-          </ul>
-        </div>
-      </div>
+    <main className="grid grid-cols-5 gap-3">
+      {metapicks.map(picks =>
+        <ChampionsContainer title={picks.role} champions={picks.champions} />
+      )}
+
     </main>
   )
 }
