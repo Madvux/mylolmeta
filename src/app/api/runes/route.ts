@@ -4,7 +4,7 @@ import { prisma } from "../../../db";
 export const GET = async () => {
     try {
         await prisma.$connect()
-        const runes = await prisma.rune.findMany()
+        const runes = await prisma.rune.findMany({include: {perks: true}})
 
         return NextResponse.json({ runes }, { status: 200 })
     } catch (error: any) {
