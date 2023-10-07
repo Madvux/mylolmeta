@@ -26,22 +26,29 @@ model Item {
 }
 
 model Perk {
-  id        String @id @default(uuid())
-  league_id Int    @unique
-  name      String @unique @db.VarChar(255)
-  key       String @unique @db.VarChar(255)
-  row       Int
-  Rune      Rune   @relation(fields: [runeId], references: [id])
-  runeId    String
+  id          String     @id @default(uuid())
+  league_id   Int        @unique
+  name        String     @unique @db.VarChar(255)
+  key         String     @unique @db.VarChar(255)
+  row         Int
+  Rune        Rune       @relation(fields: [runeId], references: [id])
+  runeId      String
+  RuneBuild   RuneBuild? @relation(fields: [runeBuildId], references: [id])
+  runeBuildId String?
 }
 
 model Rune {
-  id        String  @id @default(uuid())
-  league_id Int     @unique
-  name      String  @unique @db.VarChar(255)
-  Build     Build?  @relation(fields: [buildId], references: [id])
-  buildId   String?
+  id        String @id @default(uuid())
+  league_id Int    @unique
+  name      String @unique @db.VarChar(255)
   perks     Perk[]
+}
+
+model RuneBuild {
+  id      String  @id @default(uuid())
+  Build   Build?  @relation(fields: [buildId], references: [id])
+  buildId String?
+  runes   Perk[]
 }
 
 model Role {
@@ -51,11 +58,13 @@ model Role {
 }
 
 model Build {
-  id         String   @id @default(uuid())
-  role       Role     @relation(fields: [roleId], references: [id])
-  champion   Champion @relation(fields: [championId], references: [id])
+  id         String      @id @default(uuid())
+  role       Role        @relation(fields: [roleId], references: [id])
+  champion   Champion    @relation(fields: [championId], references: [id])
   items      Item[]
-  runes      Rune[]
+  runes      RuneBuild[]
   roleId     String
   championId String
+  createdAt  DateTime?   @default(now())
+  updatedAt  DateTime?   @updatedAt
 }
