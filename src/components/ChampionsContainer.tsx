@@ -27,7 +27,7 @@ const ChampionsContainer = async ({ id, name }: Role) => {
     return (
 
 
-        <div className="grid grid-rows-5 gap-3 ">
+        <div className="grid xl:grid-rows-5 gap-3 sm:grid-rows-2">
             <h1 className="text-4xl capitalize text-center my-auto">{name}</h1>
             {
                 builds?.map(build => build.roleId === id ? 

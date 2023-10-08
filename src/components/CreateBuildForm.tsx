@@ -4,9 +4,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ChangeEvent, useState } from 'react'
 import { createBuild } from "@/actions/build-actions"
-import { Champion, Rune, Perk, Item, PrismaClient, Build, Prisma } from '@prisma/client'
-import { BsValentine } from 'react-icons/bs'
-import { prisma } from '@/db'
+import { Champion, Rune, Perk, Item } from '@prisma/client'
 
 type RuneWithPerks = Rune & {
     perks: Perk[]
@@ -67,6 +65,12 @@ const CreateBuildForm = ({ champions, runes, items, roleID }: PageProps) => {
                     "className": "alert alert-error",
                     "msg": res.error
                 })
+                setTimeout(() => {
+                    setError({
+                        "className": "",
+                        "msg": ""
+                    })
+                }, 2000)
             } else {
                 setError({
                     "className": "alert alert-success",

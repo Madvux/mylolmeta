@@ -1,4 +1,6 @@
 import ChampionsContainer from "@/components/ChampionsContainer"
+import Footer from "@/components/Footer"
+import Header from "@/components/Header"
 import { prisma } from "@/db"
 
 const roleFetcher = async () => {
@@ -24,11 +26,14 @@ export default async function Home() {
   </div>)
 
   return (
+    <>
+    <Header />
     <main className="grid px-5 xl:grid-cols-5 gap-3 items-start">
-      {roles.map(role =>
-        <ChampionsContainer key={role.id} {...role} />
+      {roles.map(role => <ChampionsContainer key={role.id} {...role} />
       )}
 
     </main>
+    <Footer />
+    </>
   )
 }

@@ -28,7 +28,7 @@ type FormData = {
     secondaryPerksIDArray: string[]
 }
 export const createBuild = async ({roleID,championID,itemsIDArray,primaryPerksIDArray,secondaryPerksIDArray}:FormData) => {
-
+    if(!roleID || !championID) return {error: "Make sure to pick champion"}
     if(primaryPerksIDArray.length != 4) return {error: "Pick 4 primary runes"}
     if(secondaryPerksIDArray.length != 2) return {error: "Pick 2 secondary runes"}
 
