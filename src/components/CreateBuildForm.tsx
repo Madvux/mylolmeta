@@ -5,6 +5,8 @@ import Image from 'next/image'
 import { ChangeEvent, useState } from 'react'
 import { createBuild } from "@/actions/build-actions"
 import { Champion, Rune, Perk, Item } from '@prisma/client'
+import ChampionPicker from './ChampionPicker'
+import ItemsPicker from './ItemsPicker'
 
 type RuneWithPerks = Rune & {
     perks: Perk[]
@@ -54,7 +56,8 @@ const CreateBuildForm = ({ champions, runes, items, roleID }: PageProps) => {
             msg: "Creating build..."
         })
         try {
-            const res = await createBuild({roleID,
+            const res = await createBuild({
+                roleID,
                 championID: data.championID,
                 itemsIDArray: data.itemsIDArray,
                 primaryPerksIDArray: data.primaryPerksIDArray,
@@ -76,7 +79,7 @@ const CreateBuildForm = ({ champions, runes, items, roleID }: PageProps) => {
                     "className": "alert alert-success",
                     "msg": "Created!"
                 })
-                
+
                 setTimeout(() => {
                     router.prefetch('/')
                     router.push('/')
@@ -95,36 +98,27 @@ const CreateBuildForm = ({ champions, runes, items, roleID }: PageProps) => {
         })
         console.log(data)
     }
-    function handleChangeCheckbox(e: ChangeEvent<HTMLInputElement>) {
-        let newArray = [...data.itemsIDArray, e.target.value];
-        // @ts-ignore never type
-        if (data.itemsIDArray.includes(e.target.value)) {
-            newArray = newArray.filter(x => x !== e.target.value)
-        }
-        setData({ ...data, [e.target.name]: newArray })
-        console.table(data.itemsIDArray)
-    }
 
     //works for checkboxes but no radios (picks too many)
     function handleChangeRadioPrimary(e: ChangeEvent<HTMLInputElement>) {
         //max 4 picked
         let newArray = [...data.primaryPerksIDArray, e.target.value];
         // @ts-ignore never type
-        if(data.primaryPerksIDArray.includes(e.target.value)){
+        if (data.primaryPerksIDArray.includes(e.target.value)) {
             newArray = newArray.filter(x => x !== e.target.value)
         }
-        setData({...data, [e.target.name.slice(0, -2)]: newArray})
+        setData({ ...data, [e.target.name.slice(0, -2)]: newArray })
         console.table(data.primaryPerksIDArray)
     }
     //works for checkboxes but no radios (picks too many)
     function handleChangeRadioSecondary(e: ChangeEvent<HTMLInputElement>) {
-            //max  2 picked
+        //max  2 picked
         let newArray = [...data.secondaryPerksIDArray, e.target.value];
         // @ts-ignore never type
-        if(data.secondaryPerksIDArray.includes(e.target.value)){
+        if (data.secondaryPerksIDArray.includes(e.target.value)) {
             newArray = newArray.filter(x => x !== e.target.value)
         }
-        setData({...data, [e.target.name.slice(0, -2)]: newArray})
+        setData({ ...data, [e.target.name.slice(0, -2)]: newArray })
         console.table(data.secondaryPerksIDArray)
     }
     return (
@@ -134,12 +128,9 @@ const CreateBuildForm = ({ champions, runes, items, roleID }: PageProps) => {
                     <span>{`${error.msg}`}</span>
                 </div>
             </div>
+
             <form onSubmit={handleSubmit}>
-                <select name="championID" onChange={e => handleChange(e)}>
-                    {
-                        champions?.map(champion => <option key={champion.id} value={champion.id}>{champion.name}</option>)
-                    }
-                </select>
+                <ChampionPicker champions={champions} data={data} setData={setData} />
 
                 <div className="join">
                     {runes.sort((a, b) => a.league_id - b.league_id).map(rune =>
@@ -194,15 +185,7 @@ const CreateBuildForm = ({ champions, runes, items, roleID }: PageProps) => {
                     }
                 </div>
 
-                <div className="grid grid-cols-12 w-1/2">
-                    {items?.map(item =>
-                        <div key={item.id}>
-                            <input type="checkbox" name="itemsIDArray" value={item.id} id={item.id} onChange={e => handleChangeCheckbox(e)} />
-                            <label htmlFor={item.id}><Image height={64} width={64} src={`/images/item/${item.league_id}.png`} alt={item.name} /></label>
-
-                        </div>
-                    )}
-                </div>
+                <ItemsPicker items={items} data={data} setData={setData} />
 
                 {loading ? <button className="btn btn-success">
                     <span className="loading loading-spinner"></span>
