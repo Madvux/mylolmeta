@@ -1,6 +1,6 @@
 import { Item } from '@prisma/client';
 import Image from 'next/image';
-import React, { ChangeEvent, Dispatch, SetStateAction, useEffect } from 'react'
+import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 
 
 type PageProps = {
@@ -9,21 +9,23 @@ type PageProps = {
         championID: string;
         primary_tree: string;
         secondary_tree: string;
-        itemsIDArray: never[];
-        primaryPerksIDArray: never[];
-        secondaryPerksIDArray: never[];
+        itemsIDArray: string[];
+        primaryPerksIDArray: string[];
+        secondaryPerksIDArray: string[];
     },
     setData: Dispatch<SetStateAction<{
         championID: string;
         primary_tree: string;
         secondary_tree: string;
-        itemsIDArray: never[];
-        primaryPerksIDArray: never[];
-        secondaryPerksIDArray: never[];
+        itemsIDArray: string[];
+        primaryPerksIDArray: string[];
+        secondaryPerksIDArray: string[];
     }>>
 }
 
 const ItemsPicker = ({ items, data, setData }: PageProps) => {
+
+    const [filter, setFilter] = useState("")
 
     function handleChangeCheckbox(e: ChangeEvent<HTMLInputElement>) {
         let newArray = [...data.itemsIDArray, e.target.value];
@@ -36,15 +38,16 @@ const ItemsPicker = ({ items, data, setData }: PageProps) => {
     }
 
     return (
-        <div className="grid grid-cols-12 w-1/2">
-            {items?.map(item =>
-                <div key={item.id}>
+        <><input onChange={(e) => setFilter(e.target.value)}></input><div className="grid grid-cols-12 w-1/2">
+            {items
+                ?.filter(x => x.name.toLowerCase().includes(filter.toLowerCase()))
+                .map(item => <div key={item.id}>
                     <input type="checkbox" name="itemsIDArray" value={item.id} id={item.id} onChange={e => handleChangeCheckbox(e)} />
                     <label htmlFor={item.id}><Image height={64} width={64} src={`/images/item/${item.league_id}.png`} alt={item.name} /></label>
 
                 </div>
-            )}
-        </div>
+                )}
+        </div></>
     )
 }
 
