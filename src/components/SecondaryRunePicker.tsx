@@ -59,7 +59,7 @@ const RunePicker = ({ runes, data, setData }: PageProps) => {
     }
 
     return (
-        <><div className="join">
+        <article><div className="join">
             {runes.filter(e => e.id != data.primary_tree).map(rune => <input key={rune.id} type="radio" className="join-item btn" name="secondary_tree" aria-label={rune.name} value={rune.id} onChange={e => handleChange(e)} />)}
         </div>
             {data.secondaryPerksIDArray.map(e => <p key={e}> {e}</p>)}
@@ -80,7 +80,8 @@ const RunePicker = ({ runes, data, setData }: PageProps) => {
                     </div>
                     ) : null}
 
-            </div></>
+            </div>
+        </article>
     )
 }
 

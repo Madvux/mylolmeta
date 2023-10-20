@@ -1,8 +1,6 @@
 "use server"
 
 import { prisma } from "@/db"
-import { Champion, Item, Role } from '@prisma/client'
-import { error } from "console"
 import { revalidatePath } from "next/cache"
 
 export const deleteBuild = async (id: string) => {
@@ -13,7 +11,7 @@ export const deleteBuild = async (id: string) => {
         revalidatePath("/")
     } catch (error) {
         return {
-            error: "Some error occurred while deleting..., database is not responding"
+            error: "Some error occurred while deleting..., database is not responding."
         }
     } finally {
         await prisma.$disconnect()
@@ -27,10 +25,10 @@ type FormData = {
     primaryPerksIDArray: string[]
     secondaryPerksIDArray: string[]
 }
-export const createBuild = async ({roleID,championID,itemsIDArray,primaryPerksIDArray,secondaryPerksIDArray}:FormData) => {
-    if(!roleID || !championID) return {error: "Make sure to pick champion"}
-    if(primaryPerksIDArray.length != 4) return {error: "Pick 4 primary runes"}
-    if(secondaryPerksIDArray.length != 2) return {error: "Pick 2 secondary runes"}
+export const createBuild = async ({ roleID, championID, itemsIDArray, primaryPerksIDArray, secondaryPerksIDArray }: FormData) => {
+    if (!roleID || !championID) return { error: "Make sure to pick champion" }
+    if (primaryPerksIDArray.length != 4) return { error: "Pick 4 primary runes" }
+    if (secondaryPerksIDArray.length != 2) return { error: "Pick 2 secondary runes" }
 
     try {
         await prisma.$connect()

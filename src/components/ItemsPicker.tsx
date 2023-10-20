@@ -38,16 +38,19 @@ const ItemsPicker = ({ items, data, setData }: PageProps) => {
     }
 
     return (
-        <><input onChange={(e) => setFilter(e.target.value)}></input><div className="grid grid-cols-12 w-1/2">
-            {items
-                ?.filter(x => x.name.toLowerCase().includes(filter.toLowerCase()))
-                .map(item => <div key={item.id}>
-                    <input type="checkbox" name="itemsIDArray" value={item.id} id={item.id} onChange={e => handleChangeCheckbox(e)} />
-                    <label htmlFor={item.id}><Image height={64} width={64} src={`/images/item/${item.league_id}.png`} alt={item.name} /></label>
+        <section>
+            <input onChange={(e) => setFilter(e.target.value)}></input>
+            <div className="grid grid-cols-12 w-1/2 overflow-y-auto max-h-64">
+                {items
+                    ?.filter(x => x.name.toLowerCase().includes(filter.toLowerCase()))
+                    .map(item => <div key={item.id}>
+                        <input type="checkbox" name="itemsIDArray" value={item.id} id={item.id} onChange={e => handleChangeCheckbox(e)} />
+                        <label htmlFor={item.id}><Image height={64} width={64} src={`/images/item/${item.league_id}.png`} alt={item.name} /></label>
 
-                </div>
-                )}
-        </div></>
+                    </div>
+                    )}
+            </div>
+        </section>
     )
 }
 

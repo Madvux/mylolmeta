@@ -18,16 +18,16 @@ const ChampionCard = ({ id, roleId, champion }: PageProps) => {
     return (
         <>
             {champion?.name && id ?
-            <div className="relative">
-                <div className="absolute -right-2 -top-2 z-10"><DeleteButton id={id} /></div>
-                <Link href={`/${roleId}/${id}`}>
-                <div className="card card-compact card-side bg-neutral shadow-xl overflow-clip hover:scale-105 hover:bg-cyan-950 transition-all">
-                        <figure><Image src={`/images/champion/${champion.name}.png`} width={120} height={120} alt="champion image" /> </figure>
-                        <div className="card-body">
-                            <h2 className="card-title">{champion.name}</h2>
+                <div className="relative">
+                    <div className="absolute -right-2 -top-2 z-10"><DeleteButton id={id} /></div>
+                    <Link href={`/${roleId}/${id}`}>
+                        <div className="card card-compact card-side bg-neutral shadow-xl overflow-clip hover:scale-105 hover:bg-cyan-950 transition-all">
+                            <figure><Image src={`/images/champion/${champion.name}.png`} width={120} height={120} alt="champion image" /> </figure>
+                            <div className="card-body">
+                                <h2 className="card-title">{champion.name}</h2>
+                            </div>
                         </div>
-                </div>
-                </Link>
+                    </Link>
                 </div>
                 :
                 <div className="card card-compact card-side bg-neutral shadow-xl overflow-clip hover:scale-105 hover:bg-cyan-950 transition-all">

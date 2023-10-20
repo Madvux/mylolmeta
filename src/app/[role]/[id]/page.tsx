@@ -30,10 +30,10 @@ const getBuild = (id: string) => {
 
 const ChampionPage = async ({ params: { id } }: PageProps) => {
   const build = await getBuild(id)
-  const champion:Champion = build?.champion as Champion
-  const items:Item[] = build?.items as Item[]
-  const primaryRunes:Perk[] = build?.runes[0].runes as Perk[]
-  const secondaryRunes:Perk[] = build?.runes[1].runes as Perk[]
+  const champion: Champion = build?.champion as Champion
+  const items: Item[] = build?.items as Item[]
+  const primaryRunes: Perk[] = build?.runes[0].runes as Perk[]
+  const secondaryRunes: Perk[] = build?.runes[1].runes as Perk[]
 
   return (
     <div>

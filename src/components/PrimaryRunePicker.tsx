@@ -58,11 +58,12 @@ const RunePicker = ({ runes, data, setData }: PageProps) => {
     }
 
     return (
-        <><div className="join">
-            {runes
-                .sort((a, b) => a.league_id - b.league_id)
-                .map(rune => <input key={rune.id} type="radio" className="join-item btn" name="primary_tree" aria-label={rune.name} value={rune.id} onChange={e => handleChange(e)} />)}
-        </div>
+        <article>
+            <div className="join">
+                {runes
+                    .sort((a, b) => a.league_id - b.league_id)
+                    .map(rune => <input key={rune.id} type="radio" className="join-item btn" name="primary_tree" aria-label={rune.name} value={rune.id} onChange={e => handleChange(e)} />)}
+            </div>
             <div className="grid w-1/4">
                 {data.primaryPerksIDArray.map(e => <p key={e}> {e}</p>)}
                 {data.primary_tree ?
@@ -79,7 +80,8 @@ const RunePicker = ({ runes, data, setData }: PageProps) => {
                     </div>
                     ) : null}
 
-            </div></>
+            </div>
+        </article>
     )
 }
 
