@@ -9,7 +9,6 @@ type PageProps = {
 }
 
 const FormPage = async ({ params: { role } }: PageProps) => {
-
     const items = await prisma.item.findMany()
     const champions = await prisma.champion.findMany()
     const runes = await prisma.rune.findMany({ include: { perks: true } })

@@ -57,6 +57,11 @@ model Role {
   Build Build[]
 }
 
+model Key {
+  id     String  @id
+  builds Build[]
+}
+
 model Build {
   id         String      @id @default(uuid())
   role       Role        @relation(fields: [roleId], references: [id])
@@ -67,4 +72,6 @@ model Build {
   championId String
   createdAt  DateTime?   @default(now())
   updatedAt  DateTime?   @updatedAt
+  Key        Key?        @relation(fields: [keyId], references: [id])
+  keyId      String?
 }

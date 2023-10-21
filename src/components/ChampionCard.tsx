@@ -1,7 +1,7 @@
-
 import Image from "next/image"
 import DeleteButton from "./DeleteButton";
 import Link from "next/link";
+import { FC } from "react";
 type PageProps = {
     id?: string
     roleId?: string
@@ -13,7 +13,7 @@ type PageProps = {
 };
 
 
-const ChampionCard = ({ id, roleId, champion }: PageProps) => {
+const ChampionCard: FC<PageProps> = ({ id, roleId, champion }) => {
 
     return (
         <>

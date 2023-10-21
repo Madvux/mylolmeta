@@ -1,6 +1,6 @@
 "use client"
-import { useRouter } from 'next/navigation'
-import { ChangeEvent, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { FC, useState } from 'react'
 import { createBuild } from "@/actions/build-actions"
 import { Champion, Rune, Perk, Item } from '@prisma/client'
 import ChampionPicker from './ChampionPicker'
@@ -15,7 +15,7 @@ type PageProps = {
     champions: Champion[],
     runes: RuneWithPerks[],
     items: Item[],
-    roleID: string
+    roleID: string,
 }
 type Data = {
     championID: string;
@@ -26,15 +26,18 @@ type Data = {
     secondaryPerksIDArray: string[];
 }
 
-const CreateBuildForm = ({ champions, runes, items, roleID }: PageProps) => {
+const CreateBuildForm: FC<PageProps> = ({ champions, runes, items, roleID }) => {
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const key = searchParams.get('key') ?? ""
+
     const [data, setData] = useState<Data>({
         championID: "",
         primary_tree: "",
         secondary_tree: "",
         itemsIDArray: [],
         primaryPerksIDArray: [],
-        secondaryPerksIDArray: [],
+        secondaryPerksIDArray: []
     })
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState({
@@ -57,7 +60,8 @@ const CreateBuildForm = ({ champions, runes, items, roleID }: PageProps) => {
                 championID: data.championID,
                 itemsIDArray: data.itemsIDArray,
                 primaryPerksIDArray: data.primaryPerksIDArray,
-                secondaryPerksIDArray: data.secondaryPerksIDArray
+                secondaryPerksIDArray: data.secondaryPerksIDArray,
+                key: key
             })
             if (res?.error) {
                 setMessage({
@@ -95,6 +99,7 @@ const CreateBuildForm = ({ champions, runes, items, roleID }: PageProps) => {
                     <span>{`${message.msg}`}</span>
                 </div>
             </div>
+
             <p>DEV INFO</p>
             <p>champion{data.championID}</p>
             <p>items{data.itemsIDArray.map(e => e)}</p>

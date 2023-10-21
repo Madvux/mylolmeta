@@ -1,7 +1,7 @@
 "use client"
 import { Champion } from '@prisma/client'
 import Image from 'next/image';
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, useState } from 'react'
 
 type PageProps = {
     champions: Champion[],
@@ -23,7 +23,7 @@ type PageProps = {
     }>>
 }
 
-const ChampionPicker = ({ champions, data, setData }: PageProps) => {
+const ChampionPicker: FC<PageProps> = ({ champions, data, setData }) => {
 
     const [picked, setPicked] = useState<Champion>()
     const [filter, setFilter] = useState("")
@@ -39,7 +39,7 @@ const ChampionPicker = ({ champions, data, setData }: PageProps) => {
         <section>
             <p>Picked: {picked?.name}</p>
             <input onChange={(e) => setFilter(e.target.value)}></input>
-            <div className='join grid grid-cols-10 overflow-y-auto max-h-64 w-1/2'>
+            <div className='join grid grid-cols-10 overflow-y-auto max-h-64 w-1/2 scrollbar-thin scrollbar-track-rounded scrollbar-thumb-rounded scrollbar-track-neutral scrollbar- scrollbar-thumb-primary'>
                 {champions
                     .filter(x => x.name.toLowerCase().includes(filter.toLowerCase()))
                     .map(champion =>

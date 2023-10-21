@@ -1,6 +1,6 @@
 import { Item } from '@prisma/client';
 import Image from 'next/image';
-import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import React, { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react'
 
 
 type PageProps = {
@@ -23,7 +23,7 @@ type PageProps = {
     }>>
 }
 
-const ItemsPicker = ({ items, data, setData }: PageProps) => {
+const ItemsPicker: FC<PageProps> = ({ items, data, setData }) => {
 
     const [filter, setFilter] = useState("")
 

@@ -1,6 +1,6 @@
 import { Perk, Rune } from '@prisma/client';
 import Image from 'next/image';
-import React, { Dispatch, SetStateAction, useState, useEffect, ChangeEvent } from 'react'
+import React, { Dispatch, SetStateAction, useState, useEffect, ChangeEvent, FC } from 'react'
 
 type RuneWithPerks = Rune & {
     perks: Perk[]
@@ -25,7 +25,7 @@ type PageProps = {
     }>>
 }
 
-const RunePicker = ({ runes, data, setData }: PageProps) => {
+const RunePicker: FC<PageProps> = ({ runes, data, setData }) => {
 
     const [picked, setPicked] = useState<Perk[]>([]);
 

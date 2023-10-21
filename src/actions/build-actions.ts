@@ -24,8 +24,9 @@ type FormData = {
     itemsIDArray: string[],
     primaryPerksIDArray: string[]
     secondaryPerksIDArray: string[]
+    key: string
 }
-export const createBuild = async ({ roleID, championID, itemsIDArray, primaryPerksIDArray, secondaryPerksIDArray }: FormData) => {
+export const createBuild = async ({ roleID, championID, itemsIDArray, primaryPerksIDArray, secondaryPerksIDArray, key }: FormData) => {
     if (!roleID || !championID) return { error: "Make sure to pick champion" }
     if (primaryPerksIDArray.length != 4) return { error: "Pick 4 primary runes" }
     if (secondaryPerksIDArray.length != 2) return { error: "Pick 2 secondary runes" }
@@ -34,6 +35,15 @@ export const createBuild = async ({ roleID, championID, itemsIDArray, primaryPer
         await prisma.$connect()
 
         await prisma.$transaction(async (tx) => {
+            let findOrCreateKey = await tx.key.upsert({
+                where: {
+                    id: key
+                },
+                update: {},
+                create: {
+                    id: key
+                },
+            })
             let createPrimaryRunes = await tx.runeBuild.create(
                 {
                     data: {
@@ -73,12 +83,16 @@ export const createBuild = async ({ roleID, championID, itemsIDArray, primaryPer
                     },
                     runes: {
                         connect: [{ id: createPrimaryRunes.id }, { id: createSecondaryRunes.id }]
+                    },
+                    Key: {
+                        connect: { id: findOrCreateKey.id }
                     }
                 }
             })
             console.log(data)
         })
-        revalidatePath("/")
+        key ? revalidatePath(`/key=${key}`) : revalidatePath(`/`)
+
     }
     catch (error) {
         console.error(error)
