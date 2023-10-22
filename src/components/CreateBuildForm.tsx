@@ -1,5 +1,5 @@
 "use client"
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { FC, useState } from 'react'
 import { createBuild } from "@/actions/build-actions"
 import { Champion, Rune, Perk, Item } from '@prisma/client'
@@ -7,6 +7,7 @@ import ChampionPicker from './ChampionPicker'
 import ItemsPicker from './ItemsPicker'
 import PrimaryRunePicker from './PrimaryRunePicker'
 import SecondaryRunePicker from './SecondaryRunePicker'
+import { getCookie } from '@/actions/cookie-actions'
 
 type RuneWithPerks = Rune & {
     perks: Perk[]
@@ -28,8 +29,6 @@ type Data = {
 
 const CreateBuildForm: FC<PageProps> = ({ champions, runes, items, roleID }) => {
     const router = useRouter()
-    const searchParams = useSearchParams()
-    const key = searchParams.get('key') ?? ""
 
     const [data, setData] = useState<Data>({
         championID: "",
@@ -55,6 +54,7 @@ const CreateBuildForm: FC<PageProps> = ({ champions, runes, items, roleID }) => 
             msg: "Creating build..."
         })
         try {
+            let key = await getCookie()
             const res = await createBuild({
                 roleID,
                 championID: data.championID,

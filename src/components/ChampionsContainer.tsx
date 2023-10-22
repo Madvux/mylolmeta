@@ -3,9 +3,11 @@ import ChampionCard from "./ChampionCard"
 import Link from "next/link"
 import { prisma } from "@/db"
 import { FC } from "react"
+import { getCookie } from "@/actions/cookie-actions"
 
-const buildFetcher = async (key: string) => {
+const buildFetcher = async () => {
     try {
+        let key = await getCookie()
         await prisma.$connect
         const saved = await prisma.build.findMany({
             where: {
@@ -25,8 +27,8 @@ const buildFetcher = async (key: string) => {
     }
 }
 
-const ChampionsContainer: FC<Role & { buildKey: string }> = async ({ id, name, buildKey }) => {
-    const builds = await buildFetcher(buildKey ?? "")
+const ChampionsContainer: FC<Role> = async ({ id, name }) => {
+    const builds = await buildFetcher()
     return (
 
 
@@ -38,9 +40,8 @@ const ChampionsContainer: FC<Role & { buildKey: string }> = async ({ id, name, b
                     <ChampionCard key={build.id} {...build} /> :
                     null)
             }
-            {buildKey
-                ? <Link href={`/${id}?key=${buildKey}`}> <ChampionCard /> </Link>
-                : <Link href={`/${id}`}> <ChampionCard /> </Link>
+            {
+                <Link href={`/${id}`}> <ChampionCard /> </Link>
             }
         </div>
 
