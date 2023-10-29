@@ -2,6 +2,8 @@
 
 # static assets atm
 /public
+/src/jsondata
+/src/components/test
 
 # dependencies
 /node_modules
