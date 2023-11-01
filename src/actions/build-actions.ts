@@ -34,64 +34,16 @@ export const createBuild = async ({ roleID, championID, itemsIDArray, primaryPer
     try {
         await prisma.$connect()
 
-        await prisma.$transaction(async (tx) => {
-            let findOrCreateKey = await tx.key.upsert({
-                where: {
-                    id: key
-                },
-                update: {},
-                create: {
-                    id: key
-                },
-            })
-            let createPrimaryRunes = await tx.runeBuild.create(
-                {
-                    data: {
-                        runes: {
-                            connect: primaryPerksIDArray.map(e => ({ id: e }))
-                        }
-                    }
-                }
-            )
-            let createSecondaryRunes = await tx.runeBuild.create(
-                {
-                    data: {
-                        runes: {
-                            connect: secondaryPerksIDArray.map(e => ({ id: e }))
-                        }
-                    }
-                }
-            )
-            let data = await tx.build.create({
-                include: {
-                    items: true,
-                    runes: true
-                },
-                data: {
-                    champion: {
-                        connect: {
-                            id: championID
-                        }
-                    },
-                    role: {
-                        connect: {
-                            id: roleID
-                        }
-                    },
-                    items: {
-                        connect: itemsIDArray.map(item => ({ id: item }))
-                    },
-                    runes: {
-                        connect: [{ id: createPrimaryRunes.id }, { id: createSecondaryRunes.id }]
-                    },
-                    Key: {
-                        connect: { id: findOrCreateKey.id }
-                    }
-                }
-            })
-            console.log(data)
+        await prisma.build.create({
+            data: {
+                champion: championID,
+                role: roleID,
+                key: key,
+                items: itemsIDArray,
+                runes: [primaryPerksIDArray, secondaryPerksIDArray]
+            }
         })
-        key ? revalidatePath(`/key=${key}`) : revalidatePath(`/`)
+        revalidatePath(`/`)
 
     }
     catch (error) {

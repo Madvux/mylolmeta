@@ -6,72 +6,23 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
-model Champion {
-  id        String  @id @default(uuid())
-  league_id Int     @unique
-  name      String  @unique @db.VarChar(255)
-  Build     Build[]
-}
-
-model Item {
-  id        String  @id @default(uuid())
-  league_id Int     @unique
-  name      String  @db.VarChar(255)
-  Build     Build?  @relation(fields: [buildId], references: [id])
-  buildId   String?
-}
-
-model Perk {
-  id          String     @id @default(uuid())
-  league_id   Int        @unique
-  name        String     @unique @db.VarChar(255)
-  key         String     @unique @db.VarChar(255)
-  row         Int
-  Rune        Rune       @relation(fields: [runeId], references: [id])
-  runeId      String
-  RuneBuild   RuneBuild? @relation(fields: [runeBuildId], references: [id])
-  runeBuildId String?
-}
-
-model Rune {
-  id        String @id @default(uuid())
-  league_id Int    @unique
-  name      String @unique @db.VarChar(255)
-  perks     Perk[]
-}
-
-model RuneBuild {
-  id      String  @id @default(uuid())
-  Build   Build?  @relation(fields: [buildId], references: [id])
-  buildId String?
-  runes   Perk[]
-}
-
-model Role {
-  id    String  @id @default(uuid())
-  name  String  @unique @db.VarChar(10)
-  Build Build[]
-}
-
-model Key {
-  id     String  @id
-  builds Build[]
-}
-
 model Build {
-  id         String      @id @default(uuid())
-  role       Role        @relation(fields: [roleId], references: [id])
-  champion   Champion    @relation(fields: [championId], references: [id])
-  items      Item[]
-  runes      RuneBuild[]
-  roleId     String
-  championId String
-  createdAt  DateTime?   @default(now())
-  updatedAt  DateTime?   @updatedAt
-  Key        Key?        @relation(fields: [keyId], references: [id])
-  keyId      String?
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  key       String?
+  role      String
+  champion  Json
+  items     Json[]
+  runes     Json[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Report {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  text      String
+  createdAt DateTime? @default(now())
 }

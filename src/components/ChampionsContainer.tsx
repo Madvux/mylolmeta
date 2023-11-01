@@ -1,4 +1,3 @@
-import { Role } from "@prisma/client"
 import ChampionCard from "./ChampionCard"
 import Link from "next/link"
 import { prisma } from "@/db"
@@ -11,12 +10,9 @@ const buildFetcher = async () => {
         await prisma.$connect
         const saved = await prisma.build.findMany({
             where: {
-                keyId: key
-            },
-            include: {
-                champion: true,
-                items: true,
-                runes: true,
+                key: {
+                    equals: key
+                }
             }
         })
         return saved
@@ -27,21 +23,21 @@ const buildFetcher = async () => {
     }
 }
 
-const ChampionsContainer: FC<Role> = async ({ id, name }) => {
+const ChampionsContainer: FC<{ roleName: string }> = async ({ roleName }) => {
     const builds = await buildFetcher()
     return (
 
 
         <div className="grid xl:grid-rows-5 gap-3 sm:grid-rows-2">
-            <h1 className="text-4xl capitalize text-center my-auto">{name}</h1>
+            <h1 className="text-4xl capitalize text-center my-auto">{roleName}</h1>
 
             {
-                builds?.map(build => build.roleId === id ?
-                    <ChampionCard key={build.id} {...build} /> :
+                builds?.map(build => build.role === roleName ?
+                    <ChampionCard {...build} /> :
                     null)
             }
             {
-                <Link href={`/${id}`}> <ChampionCard /> </Link>
+                <Link href={`/${roleName}`}> <ChampionCard /> </Link>
             }
         </div>
 

@@ -2,22 +2,12 @@
 import { useRouter } from 'next/navigation'
 import { FC, useState } from 'react'
 import { createBuild } from "@/actions/build-actions"
-import { Champion, Rune, Perk, Item } from '@prisma/client'
 import ChampionPicker from './ChampionPicker'
 import ItemsPicker from './ItemsPicker'
 import PrimaryRunePicker from './PrimaryRunePicker'
 import SecondaryRunePicker from './SecondaryRunePicker'
 import { getCookie } from '@/actions/cookie-actions'
 
-type RuneWithPerks = Rune & {
-    perks: Perk[]
-}
-type PageProps = {
-    champions: Champion[],
-    runes: RuneWithPerks[],
-    items: Item[],
-    roleID: string,
-}
 type Data = {
     championID: string;
     primary_tree: string;
@@ -27,7 +17,7 @@ type Data = {
     secondaryPerksIDArray: string[];
 }
 
-const CreateBuildForm: FC<PageProps> = ({ champions, runes, items, roleID }) => {
+const CreateBuildForm: FC<{ roleID: string }> = ({ roleID }) => {
     const router = useRouter()
 
     const [data, setData] = useState<Data>({
@@ -108,7 +98,7 @@ const CreateBuildForm: FC<PageProps> = ({ champions, runes, items, roleID }) => 
             <p>secondary_tree{data.secondary_tree}</p>
             <p>secondaryRunes{data.secondaryPerksIDArray.map(e => e)}</p>
             <form onSubmit={handleSubmit}>
-                <ChampionPicker champions={champions} data={data} setData={setData} />
+                <ChampionPicker data={data} setData={setData} />
 
 
                 <section>
@@ -117,10 +107,10 @@ const CreateBuildForm: FC<PageProps> = ({ champions, runes, items, roleID }) => 
                         <span>RUNES MIGH NOT BE IN RIGHT ORDER</span>
                     </div> */}
 
-                    <PrimaryRunePicker runes={runes} data={data} setData={setData} />
-                    <SecondaryRunePicker runes={runes} data={data} setData={setData} />
+                    <PrimaryRunePicker data={data} setData={setData} />
+                    <SecondaryRunePicker data={data} setData={setData} />
                 </section>
-                <ItemsPicker items={items} data={data} setData={setData} />
+                <ItemsPicker data={data} setData={setData} />
 
                 {loading ? <button className="btn btn-success" aria-disabled="true">
                     <span className="loading loading-spinner"></span>

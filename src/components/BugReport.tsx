@@ -1,4 +1,6 @@
 "use client"
+import { createBugReport } from '@/actions/report-actions'
+import { prisma } from '@/db'
 import React, { FC, useState } from 'react'
 
 const BugReport: FC = () => {
@@ -11,7 +13,7 @@ const BugReport: FC = () => {
 
         let errors = []
         if (text.length < 1) errors.push("Write something :)")
-        if (text.length > 255) errors.push(`${`Text is too long.\nPlease submit two or more bug reports instead!`}`)
+        if (text.length > 600) errors.push(`${`Text is too long.\nPlease submit two or more bug reports instead!`}`)
         if (errors.length != 0) {
             setError(errors)
             return
@@ -23,7 +25,13 @@ const BugReport: FC = () => {
     }
 
     async function sendMessage(text: string) {
-        console.log("To database: " + text)
+
+        try {
+            const res = await createBugReport(text)
+            if (res?.error) { alert(res.error) }
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     function makeToast() {
@@ -46,8 +54,8 @@ const BugReport: FC = () => {
                     </h3>
                     <p className="py-4">What's the problem?</p>
                     <form method="dialog" className="flex flex-col gap-2" onSubmit={handleSubmit}>
-                        <textarea className="textarea textarea-bordered textarea-lg w-full" placeholder="Describe your bug..." onChange={(e) => setText(e.target.value)}></textarea>
-                        <div className='flex justify-between gap-2'>{text.length}/255 <div className=''>{error.map((e, index) => <p key={index} className='text-error text-right whitespace-pre-line'>{e}</p>)}</div></div>
+                        <textarea className="textarea textarea-bordered textarea-lg w-full min-h-[30vh]" placeholder="Describe your bug..." onChange={(e) => setText(e.target.value)}></textarea>
+                        <div className='flex justify-between gap-2'>{text.length}/600 <div className=''>{error.map((e, index) => <p key={index} className='text-error text-right whitespace-pre-line'>{e}</p>)}</div></div>
                         <button className="btn btn-success" type="submit">Send</button>
 
                     </form>

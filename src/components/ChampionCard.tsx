@@ -2,33 +2,32 @@ import Image from "next/image"
 import DeleteButton from "./DeleteButton";
 import Link from "next/link";
 import { FC } from "react";
+import jsonFile from "../jsondata/champion.json"
+
 type PageProps = {
-    id?: string
-    roleId?: string
-    champion?: {
-        id: string;
-        league_id: number;
-        name: string;
-    }
-};
-
-
-const ChampionCard: FC<PageProps> = ({ id, roleId, champion }) => {
-
+    id: string,
+    role: string,
+    champion: keyof typeof jsonFile.data
+}
+const ChampionCard: FC<PageProps> = ({ champion, id, role }) => {
+    const champions = jsonFile.data
     return (
         <>
-            {champion?.name && id ?
+            {champions[champion] ?
                 <div className="relative">
                     <div className="absolute -right-2 -top-2 z-10"><DeleteButton id={id} /></div>
-                    <Link href={`/${roleId}/${id}`}>
+                    <Link href={`/${role}/${id}`}>
                         <div className="card card-compact card-side bg-neutral shadow-xl overflow-clip hover:scale-105 hover:bg-cyan-950 transition-all">
-                            <figure><Image src={`/images/champion/${champion.name}.png`} width={120} height={120} alt="champion image" /> </figure>
+                            <figure><Image src={`/loldata/${jsonFile.version}/img/champion/${champions[champion].image.full}`} width={120} height={120} alt={champions[champion].name} /></figure>
+
+
                             <div className="card-body">
-                                <h2 className="card-title">{champion.name}</h2>
+                                <h2 className="card-title">{champions[champion].name}</h2>
                             </div>
                         </div>
                     </Link>
                 </div>
+
                 :
                 <div className="card card-compact card-side bg-neutral shadow-xl overflow-clip hover:scale-105 hover:bg-cyan-950 transition-all">
 
